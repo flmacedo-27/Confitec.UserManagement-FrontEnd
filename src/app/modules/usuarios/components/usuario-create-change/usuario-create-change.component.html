@@ -1,0 +1,115 @@
+<body class="container">
+  <div class="card">
+    <h5 *ngIf="isAddMode" class="card-header">Criar Usuário</h5>
+    <h5 *ngIf="!isAddMode" class="card-header">Alterar Usuário</h5>
+    <div class="card-body">
+      <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label>NOME</label>
+            <input
+              class="form-control"
+              type="text"
+              maxlength="30"
+              formControlName="nome"
+              [ngClass]="{ 'is-invalid': submitted && f.nome.errors }"
+            />
+            <div class="invalid-feedback" *ngIf="submitted && f.nome.errors">
+              <div *ngIf="f.nome.errors.required">O nome é obrigatório</div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label>SOBRENOME</label>
+            <input
+              class="form-control"
+              type="text"
+              maxlength="30"
+              formControlName="sobrenome"
+              [ngClass]="{ 'is-invalid': submitted && f.sobrenome.errors }"
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="submitted && f.sobrenome.errors"
+            >
+              <div *ngIf="f.nome.errors.required">
+                O sobrenome é obrigatório
+              </div>
+              <div *ngIf="f.nome.errors.maxlength">
+                Não deve ultrapassar 30 caracteres
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label>E-MAIL</label>
+            <input
+              class="form-control"
+              type="text"
+              maxlength="40"
+              formControlName="email"
+              [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+            />
+            <div class="invalid-feedback" *ngIf="submitted && f.email.errors">
+              <div *ngIf="f.email.errors.required">O e-mail é obrigatório</div>
+              <div>Formato de e-mail inválido</div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label>DATA DE NASCIMENTO</label>
+            <input
+              class="form-control"
+              type="date"
+              formControlName="dataNascimento"
+              (blur)="onValidateDate($event.target.value)"
+              [ngClass]="{ 'is-invalid': submitted && f.dataNascimento.errors }"
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="submitted && f.dataNascimento.errors"
+            >
+              <div *ngIf="f.dataNascimento.errors.required">
+                A data de nascimento é obrigatória
+              </div>
+              <div *ngIf="f.dataNascimento.errors.incorrect">
+                A data de nascimento não pode ser maior que hoje
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label>ESCOLARIDADE</label>
+            <select
+              class="form-select"
+              formControlName="escolaridade"
+              [ngClass]="{ 'is-invalid': submitted && f.escolaridade.errors }"
+            >
+              <option value=""></option>
+              <option
+                *ngFor="let escolaridade of escolaridade | async"
+                [value]="escolaridade.id"
+              >
+                {{ escolaridade.descricao }}
+              </option>
+            </select>
+            <div
+              class="invalid-feedback"
+              *ngIf="submitted && f.escolaridade.errors"
+            >
+              <div *ngIf="f.escolaridade.errors.required">
+                A escolaridade é obrigatória
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center">
+          <button [disabled]="loading" class="btn btn-primary me-md-3">
+            <span
+              *ngIf="loading"
+              class="spinner-border spinner-border-sm mr-1"
+            ></span>
+            Salvar
+          </button>
+          <a routerLink="/usuarios" class="btn btn-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>

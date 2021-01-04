@@ -1,0 +1,55 @@
+<body>
+  <div class="card shadow-sm">
+    <div class="card-header shadow-sm">
+      <div class="float-right">
+        <a
+          routerLink="create"
+          class="btn btn-primary"
+          style="padding-right: 12px"
+          >NOVO USUÁRIO</a
+        >
+      </div>
+    </div>
+    <div class="card-body">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>NOME</th>
+            <th>SOBRENOME</th>
+            <th>E-MAIL</th>
+            <th>DATA DE NASCIMENTO</th>
+            <th>ESCOLARIDADE</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios">
+            <td>{{ usuario.nome }}</td>
+            <td>{{ usuario.sobrenome }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.dataNascimento | date: "dd/MM/yyyy" }}</td>
+            <td>{{ usuario.escolaridade }}</td>
+            <td style="white-space: nowrap">
+              <a
+                routerLink="change/{{ usuario.id }}"
+                class="btn btn-sm btn-primary me-md-3"
+                >Alterar</a
+              >
+              <button
+                [disabled]="loading"
+                class="btn btn-sm btn-danger"
+                (click)="onDelete(usuario.id)"
+              >
+                <span
+                  *ngIf="usuario.isDeleting"
+                  class="spinner-border spinner-border-sm"
+                ></span>
+                <span *ngIf="!usuario.isDeleting">Deletar</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
