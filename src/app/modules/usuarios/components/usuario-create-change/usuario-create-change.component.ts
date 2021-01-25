@@ -84,10 +84,17 @@ export class UsuarioCreateChangeComponent implements OnInit {
     this.usuarioService
       .insert(this.usuarioForm.value)
       .pipe(first())
-      .subscribe(() => {
-        alert('Usuário criado com sucesso');
-        this.router.navigateByUrl('/usuarios');
-      })
+      .subscribe(
+        (sucess) => {
+          alert(sucess);
+          this.router.navigateByUrl('/usuarios');
+        },
+        (err) => {
+          if (err.status == 500) {
+            alert(err.error);
+          }
+        }
+      )
       .add(() => (this.loading = false));
   }
 
@@ -95,10 +102,19 @@ export class UsuarioCreateChangeComponent implements OnInit {
     this.usuarioService
       .update(this.usuarioForm.value)
       .pipe(first())
-      .subscribe(() => {
-        alert('Usuário atualizado com sucesso');
-        this.router.navigateByUrl('/usuarios');
-      })
+      .subscribe(
+        (sucess) => {
+          alert(sucess);
+          this.router.navigateByUrl('/usuarios');
+        },
+        (err) => {
+          if (err.status == 500) {
+            alert(err.error);
+          } else if (err.status == 403) {
+            alert(err.error.message);
+          }
+        }
+      )
       .add(() => (this.loading = false));
   }
 }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Usuarios } from 'src/app/shared/models/usuarios';
 import { UsuariosService } from '../../usuarios.service';
 
@@ -11,10 +10,7 @@ import { UsuariosService } from '../../usuarios.service';
 export class UsuariosListComponent implements OnInit {
   usuarios!: Usuarios[];
 
-  constructor(
-    private usuarioService: UsuariosService,
-    private router: Router
-  ) {}
+  constructor(private usuarioService: UsuariosService) {}
 
   ngOnInit(): void {
     this.usuarioService.getAll().subscribe((dados) => (this.usuarios = dados));
@@ -27,9 +23,21 @@ export class UsuariosListComponent implements OnInit {
 
     usuario.isDeleting = true;
 
-    this.usuarioService.delete(id).subscribe(() => {
-      alert('Usuário excluído com sucesso');
-      this.usuarios = this.usuarios.filter((u) => u.id !== id);
-    });
+    this.usuarioService
+      .delete(id)
+      .subscribe(
+        (sucess) => {
+          alert(sucess);
+          this.usuarios = this.usuarios.filter((u) => u.id !== id);
+        },
+        (err) => {
+          if (err.status == 500) {
+            alert(err.error);
+          } else if (err.status == 403) {
+            alert(err.error.message);
+          }
+        }
+      )
+      .add(() => (usuario.isDeleting = false));
   }
 }
